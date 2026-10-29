@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixiDrive | Galerías Fotográficas Profesionales con Google Drive</title>
+    <meta name="description" content="PixiDrive: La plataforma de galerías con estética Pixieset para fotógrafos que se conecta directamente a tu Google Drive. Selección de favoritas, descargas rápidas y SEO optimizado.">
+    
+    <!-- Open Graph / Meta Marketing -->
+    <meta property="og:title" content="PixiDrive - Galerías para Fotógrafos en tu propio Google Drive">
+    <meta property="og:description" content="Entrega tus galerías fotográficas con elegancia editorial, selección de favoritas doble y descargas ultra rápidas directamente desde tu Google Drive.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7f6',
+                            100: '#e3eae7',
+                            200: '#c7d6d1',
+                            500: '#1a302b',
+                            600: '#142622',
+                            800: '#0f1a18',
+                            900: '#0a100f',
+                            accent: '#2b5c51'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.25rem;
+        }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.25rem;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 font-sans antialiased transition-colors duration-300">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/80 dark:bg-zinc-950/80 border-b border-slate-200/60 dark:border-zinc-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-900/10 group-hover:scale-105 transition-transform">
+                    <i data-lucide="hard-drive-download" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight font-sans text-slate-900 dark:text-white">pixidrive<span class="text-emerald-600 dark:text-emerald-400">.org</span></span>
+                    <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-semibold -mt-1">Drive-Powered Galleries</span>
+                </div>
+            </a>
+
+            <!-- Nav Links (Desktop) -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-zinc-300">
+                <a href="#beneficios" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Beneficios</a>
+                <a href="#experiencia" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Experiencia de Galería</a>
+                <a href="#drive-sync" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Google Drive Integration</a>
+                <a href="#seo-velocidad" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">SEO & Rendimiento</a>
+            </div>
+
+            <!-- Action CTAs -->
+            <div class="flex items-center gap-3">
+                <button id="themeToggleBtn" aria-label="Cambiar tema" class="p-2.5 rounded-lg text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 transition-colors">
+                    <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                </button>
+
+                <button onclick="openRepoModal()" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-700 dark:text-zinc-300 bg-slate-200/70 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 transition-all">
+                    <i data-lucide="code" class="w-4 h-4"></i>
+                    Archivos Repo
+                </button>
+
+                <a href="#lista-espera" class="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-white bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 shadow-md transition-all">
+                    Solicitar Acceso
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-emerald-500/15 to-emerald-200/10 dark:from-emerald-600/10 dark:to-transparent rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-xs font-medium mb-6">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>La elegancia de Pixieset con la potencia de tu Google Drive</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl sm:text-6xl font-serif tracking-tight text-slate-900 dark:text-white max-w-4xl mx-auto leading-[1.15]">
+                Entrega galerías de fotos deslumbrantes usando la nube que <span class="italic font-normal text-emerald-700 dark:text-emerald-400">ya posees</span>
+            </h1>
+
+            <p class="mt-6 text-lg sm:text-xl text-slate-600 dark:text-zinc-300 max-w-2xl mx-auto font-normal leading-relaxed">
+                PixiDrive vincula directamente tu cuenta de Google Drive para crear galerías web con estética editorial. Selección de favoritas para cliente y fotógrafo, descargas ultra rápidas y posicionamiento SEO automático.
+            </p>
+
+            <!-- Lead Generation Form (Hero CTA) -->
+            <div class="mt-10 max-w-md mx-auto">
+                <form onsubmit="handleWaitlistSubmit(event)" class="flex flex-col sm:flex-row gap-2.5 p-2 bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xl">
+                    <input type="email" required placeholder="Tu correo profesional..." class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white border-0 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <button type="submit" class="whitespace-nowrap px-6 py-3 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                        <span>Unirme VIP</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+                <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-2 text-center">Acceso anticipado para fotógrafos. Sin cargos ocultos ni sorpresas.</p>
+            </div>
+
+            <!-- Metrics -->
+            <div class="mt-14 pt-8 border-t border-slate-200/60 dark:border-zinc-800/60 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto text-center">
+                <div>
+                    <span class="block text-2xl font-bold text-slate-900 dark:text-white">0%</span>
+                    <span class="text-xs text-slate-500 dark:text-zinc-400">Comisión por almacenamiento extra</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold text-slate-900 dark:text-white">100 / 100</span>
+                    <span class="text-xs text-slate-500 dark:text-zinc-400">Score de Velocidad & SEO Google</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold text-slate-900 dark:text-white">Doble Vía</span>
+                    <span class="text-xs text-slate-500 dark:text-zinc-400">Selección de Favoritas</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold text-slate-900 dark:text-white">Directo</span>
+                    <span class="text-xs text-slate-500 dark:text-zinc-400">Sincronizado con tu Drive</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= VALUE PROPOSITION / MARKETING FEATURES ================= -->
+    <section id="beneficios" class="py-20 bg-white dark:bg-zinc-900/50 border-y border-slate-200/60 dark:border-zinc-800/60 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">Diseñado para Fotógrafos Exigentes</h2>
+                <p class="mt-2 text-3xl sm:text-4xl font-serif text-slate-900 dark:text-white">Todo lo que tu flujo de trabajo necesita, libre de ataduras</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Selección de Favoritas de Doble Vía</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Destaca tus mejores fotos como recomendación de autor y permite que tus clientes elijan sus favoritas (❤️) para retoque, álbum o impresión desde cualquier dispositivo.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="cloud" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Conexión Directa a tu Google Drive</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Sin subir fotos a servidores desconocidos ni pagar suscripciones infladas por gigabytes. Tu Google Drive almacena las imágenes originales con total propiedad y seguridad.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="download shadow-sm" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Descargas Eficientes y Sin Complicaciones</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Tus clientes pueden descargar la galería completa en un archivo ZIP o descargar fotos individuales en alta resolución en un solo clic y sin interrupciones.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Previsualización y Carga Ultra Rápida</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Optimizador automático de miniaturas en formato WebP que garantiza un despliegue fluido al hacer scroll, incluso en galerías con más de 500 fotografías.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">SEO Integrado para Escalar en Google</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Arquitectura web optimizada con etiquetas OpenGraph, esquemas de fotografía y marcado semántico para escalar en resultados de búsqueda locales orgánicamente.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Estética Editorial Estilo Pixieset</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Diseño limpio, enfocado en el impacto visual de tus imágenes. Diseñado para ofrecer una presentación sofisticada ante tus clientes finales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= INTERACTIVE GALLERY SHOWCASE ================= -->
+    <section id="experiencia" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <span class="text-xs uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">Muestra Visual</span>
+                <h2 class="text-3xl font-serif text-slate-900 dark:text-white mt-1">La experiencia de tus clientes en PixiDrive</h2>
+                <p class="text-sm text-slate-600 dark:text-zinc-400 mt-1">Explora la interfaz interactiva que verán tus clientes al recibir su galería.</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex items-center gap-2 bg-white dark:bg-zinc-900 p-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                <button onclick="filterShowcase('all')" id="filter-showcase-all" class="showcase-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white dark:bg-emerald-600 transition-all">
+                    Todas (<span id="cnt-all">6</span>)
+                </button>
+                <button onclick="filterShowcase('client')" id="filter-showcase-client" class="showcase-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all">
+                    ❤️ Favoritas Cliente (<span id="cnt-client">2</span>)
+                </button>
+                <button onclick="filterShowcase('photographer')" id="filter-showcase-photographer" class="showcase-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all">
+                    ⭐ Selección Fotógrafo (<span id="cnt-photographer">3</span>)
+                </button>
+            </div>
+        </div>
+
+        <!-- Simulated Gallery Presentation -->
+        <div class="bg-white dark:bg-zinc-900/80 rounded-2xl p-6 border border-slate-200/80 dark:border-zinc-800 shadow-xl">
+            <!-- Cover Header -->
+            <div class="relative h-56 sm:h-72 rounded-xl overflow-hidden mb-8 group">
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" alt="Portada de Galería" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 text-white">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-emerald-300 font-semibold">Sesión de Boda</span>
+                            <h3 class="text-2xl sm:text-3xl font-serif">Valeria & Santiago</h3>
+                        </div>
+                        <button onclick="triggerSimulatedZIP()" class="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg text-xs font-semibold text-white transition-all">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Descargar Selección (.ZIP)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Container -->
+            <div id="showcase-grid-wrapper" class="masonry-grid">
+                <!-- Dynamic via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= GOOGLE DRIVE INTEGRATION EXPLAINER ================= -->
+    <section id="drive-sync" class="py-20 bg-slate-100 dark:bg-zinc-900 border-y border-slate-200/60 dark:border-zinc-800/60 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">Sin complicaciones técnicas</span>
+                <h2 class="text-3xl font-serif text-slate-900 dark:text-white mt-1">Conexión directa con tu cuenta de Google Drive</h2>
+                <p class="text-sm text-slate-600 dark:text-zinc-400 mt-2">Aprovecha el espacio que ya pagas en tu cuenta de Google sin requerir servidores adicionales.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-zinc-950 p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 text-center">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center mx-auto mb-4">1</div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Conecta tu Cuenta</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400">Otorga acceso seguro a PixiDrive para leer tus archivos multimedia directamente desde tu Drive personal o de negocios.</p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-950 p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 text-center">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center mx-auto mb-4">2</div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Genera la Galería Web</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400">PixiDrive transforma automáticamente tus fotos en una galería interactiva de alto impacto para enviar a tus clientes.</p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-950 p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 text-center">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center mx-auto mb-4">3</div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Sincronización Automática</h3>
+                    <p class="text-sm text-slate-600 dark:text-zinc-400">Cualquier cambio de archivos en tu Google Drive se refleja en tiempo real en la galería web de tus clientes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SEO & PERFORMANCE SECTION ================= -->
+    <section id="seo-velocidad" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-br from-slate-900 to-brand-800 text-white rounded-3xl p-8 sm:p-12 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Velocidad & Posicionamiento</span>
+                    <h2 class="text-3xl sm:text-4xl font-serif mt-2 mb-4">Escala tu negocio fotográfico en los buscadores</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                        Otras plataformas cargan páginas pesadas que perjudican tu posicionamiento SEO. PixiDrive está optimizado para cargar instantáneamente y posicionar tus galerías en Google, ayudándote a atraer clientes orgánicamente con el tiempo.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-md">
+                            <i data-lucide="zap" class="w-6 h-6 text-emerald-400"></i>
+                            <div>
+                                <h4 class="text-sm font-semibold">Carga Inmediata de Previsualizaciones</h4>
+                                <p class="text-xs text-slate-300">Thumbnails livianos optimizados en formato WebP para dispositivos móviles.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-md">
+                            <i data-lucide="search-check" class="w-6 h-6 text-emerald-400"></i>
+                            <div>
+                                <h4 class="text-sm font-semibold">SEO Local y Marcado de Imágenes</h4>
+                                <p class="text-xs text-slate-300">Estructura limpia para que Google indexe tus trabajos y marca personal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PageSpeed Stats -->
+                <div class="bg-zinc-950/80 p-8 rounded-2xl border border-zinc-800 text-center">
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-6">Puntuación Google PageSpeed Insights</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                            <span class="text-3xl font-bold text-emerald-400">100</span>
+                            <span class="block text-xs text-slate-400 mt-1">Rendimiento Móvil</span>
+                        </div>
+                        <div class="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                            <span class="text-3xl font-bold text-emerald-400">100</span>
+                            <span class="block text-xs text-slate-400 mt-1">SEO & Indexación</span>
+                        </div>
+                        <div class="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                            <span class="text-3xl font-bold text-emerald-400">&lt; 0.3s</span>
+                            <span class="block text-xs text-slate-400 mt-1">Tiempo de Carga</span>
+                        </div>
+                        <div class="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                            <span class="text-3xl font-bold text-emerald-400">0 GB</span>
+                            <span class="block text-xs text-slate-400 mt-1">Costo de Servidor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= WAITLIST / LEAD CAPTURE SECTION ================= -->
+    <section id="lista-espera" class="py-20 bg-slate-100 dark:bg-zinc-900 border-t border-slate-200/60 dark:border-zinc-800/60 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">Únete al Lanzamiento</span>
+            <h2 class="text-3xl sm:text-4xl font-serif text-slate-900 dark:text-white mt-2 mb-4">¿Listo para revolucionar la entrega de tus fotografías?</h2>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
+                Súmate a la lista VIP para obtener acceso anticipado a PixiDrive y entregar galerías ilimitadas directamente desde tu Google Drive.
+            </p>
+
+            <form onsubmit="handleWaitlistSubmit(event)" class="max-w-md mx-auto space-y-3">
+                <input type="text" placeholder="Tu nombre o nombre de tu estudio" required class="w-full px-4 py-3 text-sm rounded-xl bg-white dark:bg-zinc-950 text-slate-900 dark:text-white border border-slate-300 dark:border-zinc-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <input type="email" placeholder="Tu correo electrónico..." required class="w-full px-4 py-3 text-sm rounded-xl bg-white dark:bg-zinc-950 text-slate-900 dark:text-white border border-slate-300 dark:border-zinc-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <button type="submit" class="w-full py-3.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl shadow-lg transition-all">
+                    Solicitar Invitación VIP
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ================= LIGHTBOX MODAL ================= -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 p-2 text-white/70 hover:text-white text-sm bg-zinc-800/80 rounded-full">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="max-w-4xl w-full flex flex-col items-center">
+            <div class="relative max-h-[75vh] overflow-hidden rounded-lg mb-4 flex items-center justify-center">
+                <img id="lightbox-img" src="" alt="Previsualización" class="max-h-[70vh] w-auto object-contain rounded-lg">
+            </div>
+
+            <div class="flex items-center gap-4 bg-zinc-900/90 border border-zinc-800 px-6 py-3 rounded-full text-white">
+                <button id="lightbox-fav-client" onclick="toggleCurrentPhotoFav('client')" class="flex items-center gap-2 text-xs font-medium hover:text-rose-400 transition-colors">
+                    <i data-lucide="heart" class="w-4 h-4"></i>
+                    <span>Favorita Cliente</span>
+                </button>
+                <div class="h-4 w-px bg-zinc-700"></div>
+                <button id="lightbox-fav-photo" onclick="toggleCurrentPhotoFav('photographer')" class="flex items-center gap-2 text-xs font-medium hover:text-amber-400 transition-colors">
+                    <i data-lucide="star" class="w-4 h-4"></i>
+                    <span>Selección Fotógrafo</span>
+                </button>
+                <div class="h-4 w-px bg-zinc-700"></div>
+                <button onclick="simulateSingleDownload()" class="flex items-center gap-2 text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Descargar HD</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= REPOSITORY EXPORTER MODAL ================= -->
+    <div id="repo-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-zinc-800 text-white rounded-2xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
+                        <i data-lucide="code" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold">Archivos del Repositorio PixiDrive</h3>
+                        <p class="text-xs text-zinc-400">Copia los archivos para tu repositorio de GitHub / Vercel / Netlify</p>
+                    </div>
+                </div>
+                <button onclick="closeRepoModal()" class="p-2 text-zinc-400 hover:text-white rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="px-6 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs">
+                <div class="flex gap-2">
+                    <button onclick="switchCodeTab('html')" id="tab-btn-html" class="tab-code-btn active px-4 py-3 font-mono font-semibold text-emerald-400 border-b-2 border-emerald-500">index.html</button>
+                    <button onclick="switchCodeTab('css')" id="tab-btn-css" class="tab-code-btn px-4 py-3 font-mono text-zinc-400 hover:text-white">styles.css</button>
+                    <button onclick="switchCodeTab('js')" id="tab-btn-js" class="tab-code-btn px-4 py-3 font-mono text-zinc-400 hover:text-white">script.js</button>
+                </div>
+                <button onclick="copyCurrentCodeTab()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-all">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span id="copy-btn-text">Copiar Código</span>
+                </button>
+            </div>
+
+            <div class="flex-1 p-6 overflow-auto bg-zinc-950 font-mono text-xs leading-relaxed text-zinc-300">
+                <pre id="code-content-display" class="whitespace-pre-wrap"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="text-lg font-bold text-white font-sans">pixidrive<span class="text-emerald-400">.org</span></span>
+                <span>— Galerías Fotográficas Profesionales impulsadas por Google Drive.</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#beneficios" class="hover:text-white transition-colors">Beneficios</a>
+                <a href="#experiencia" class="hover:text-white transition-colors">Galería</a>
+                <a href="#drive-sync" class="hover:text-white transition-colors">Google Drive</a>
+                <button onclick="openRepoModal()" class="hover:text-white transition-colors text-emerald-400">Ver Código Repo</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        lucide.createIcons();
+
+        // Theme Toggle
+        document.getElementById('themeToggleBtn').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Showcase Photos State
+        let showcasePhotos = [
+            {
+                id: 1,
+                url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+                title: 'Retrato de Novios',
+                isClientFav: true,
+                isPhotographerFav: true,
+            },
+            {
+                id: 2,
+                url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+                title: 'Intercambio de Anillos',
+                isClientFav: false,
+                isPhotographerFav: true,
+            },
+            {
+                id: 3,
+                url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80',
+                title: 'Decoración del Banquete',
+                isClientFav: true,
+                isPhotographerFav: false,
+            },
+            {
+                id: 4,
+                url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+                title: 'Primer Baile de Esposos',
+                isClientFav: false,
+                isPhotographerFav: true,
+            },
+            {
+                id: 5,
+                url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
+                title: 'Llegada de la Novia',
+                isClientFav: false,
+                isPhotographerFav: false,
+            },
+            {
+                id: 6,
+                url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80',
+                title: 'Brindis de Celebración',
+                isClientFav: false,
+                isPhotographerFav: false,
+            }
+        ];
+
+        let currentShowcaseFilter = 'all';
+        let activePhotoId = null;
+
+        function renderShowcase() {
+            const container = document.getElementById('showcase-grid-wrapper');
+            container.innerHTML = '';
+
+            let filtered = showcasePhotos;
+            if (currentShowcaseFilter === 'client') {
+                filtered = showcasePhotos.filter(p => p.isClientFav);
+            } else if (currentShowcaseFilter === 'photographer') {
+                filtered = showcasePhotos.filter(p => p.isPhotographerFav);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400">
+                        <i data-lucide="image-off" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-sm">No hay fotografías en esta categoría.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'masonry-item relative group overflow-hidden rounded-xl bg-slate-100 dark:bg-zinc-800 shadow-sm';
+                item.innerHTML = `
+                    <img src="${photo.url}" alt="${photo.title}" class="w-full h-auto group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="openLightbox(${photo.id})">
+                    
+                    <div class="absolute top-3 left-3 flex gap-1.5 pointer-events-none">
+                        ${photo.isClientFav ? '<span class="p-1.5 rounded-full bg-rose-500 text-white shadow-md"><i data-lucide="heart" class="w-3 h-3 fill-current"></i></span>' : ''}
+                        ${photo.isPhotographerFav ? '<span class="p-1.5 rounded-full bg-amber-500 text-white shadow-md"><i data-lucide="star" class="w-3 h-3 fill-current"></i></span>' : ''}
+                    </div>
+
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4 pointer-events-none">
+                        <span class="text-xs text-white font-medium">${photo.title}</span>
+                        <div class="flex items-center gap-2 pointer-events-auto">
+                            <button onclick="toggleFav(${photo.id}, 'client')" class="p-2 rounded-full ${photo.isClientFav ? 'bg-rose-500 text-white' : 'bg-white/20 text-white hover:bg-white/40'} backdrop-blur-md transition-colors">
+                                <i data-lucide="heart" class="w-3.5 h-3.5 ${photo.isClientFav ? 'fill-current' : ''}"></i>
+                            </button>
+                            <button onclick="toggleFav(${photo.id}, 'photographer')" class="p-2 rounded-full ${photo.isPhotographerFav ? 'bg-amber-500 text-white' : 'bg-white/20 text-white hover:bg-white/40'} backdrop-blur-md transition-colors">
+                                <i data-lucide="star" class="w-3.5 h-3.5 ${photo.isPhotographerFav ? 'fill-current' : ''}"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            document.getElementById('cnt-all').innerText = showcasePhotos.length;
+            document.getElementById('cnt-client').innerText = showcasePhotos.filter(p => p.isClientFav).length;
+            document.getElementById('cnt-photographer').innerText = showcasePhotos.filter(p => p.isPhotographerFav).length;
+
+            lucide.createIcons();
+        }
+
+        function filterShowcase(type) {
+            currentShowcaseFilter = type;
+            document.querySelectorAll('.showcase-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'dark:bg-emerald-600');
+                btn.classList.add('text-slate-600', 'dark:text-zinc-400');
+            });
+            const activeBtn = document.getElementById(`filter-showcase-${type}`);
+            activeBtn.classList.add('bg-slate-900', 'text-white', 'dark:bg-emerald-600');
+            activeBtn.classList.remove('text-slate-600', 'dark:text-zinc-400');
+            renderShowcase();
+        }
+
+        function toggleFav(id, type) {
+            const photo = showcasePhotos.find(p => p.id === id);
+            if (photo) {
+                if (type === 'client') photo.isClientFav = !photo.isClientFav;
+                if (type === 'photographer') photo.isPhotographerFav = !photo.isPhotographerFav;
+                renderShowcase();
+            }
+        }
+
+        // Lightbox
+        function openLightbox(id) {
+            activePhotoId = id;
+            const photo = showcasePhotos.find(p => p.id === id);
+            if (!photo) return;
+            document.getElementById('lightbox-img').src = photo.url;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+            updateLightboxState(photo);
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+            activePhotoId = null;
+        }
+
+        function updateLightboxState(photo) {
+            const clientBtn = document.getElementById('lightbox-fav-client');
+            const photoBtn = document.getElementById('lightbox-fav-photo');
+
+            clientBtn.className = photo.isClientFav 
+                ? 'flex items-center gap-2 text-xs font-medium text-rose-500 font-bold transition-colors' 
+                : 'flex items-center gap-2 text-xs font-medium text-white hover:text-rose-400 transition-colors';
+
+            photoBtn.className = photo.isPhotographerFav 
+                ? 'flex items-center gap-2 text-xs font-medium text-amber-400 font-bold transition-colors' 
+                : 'flex items-center gap-2 text-xs font-medium text-white hover:text-amber-400 transition-colors';
+        }
+
+        function toggleCurrentPhotoFav(type) {
+            if (activePhotoId !== null) {
+                toggleFav(activePhotoId, type);
+                const photo = showcasePhotos.find(p => p.id === activePhotoId);
+                updateLightboxState(photo);
+            }
+        }
+
+        function simulateSingleDownload() {
+            showToast("Simulación: Descargando fotografía desde Google Drive...");
+        }
+
+        function triggerSimulatedZIP() {
+            const count = showcasePhotos.filter(p => p.isClientFav).length;
+            showToast(`Generando archivo ZIP con ${count} fotos seleccionadas...`);
+        }
+
+        function handleWaitlistSubmit(e) {
+            e.preventDefault();
+            showToast("¡Gracias! Te hemos añadido a la lista de acceso anticipado.");
+            e.target.reset();
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white dark:bg-emerald-600 px-4 py-3 rounded-xl shadow-2xl text-xs font-medium flex items-center gap-2 animate-bounce';
+            toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 dark:text-white"></i> <span>${msg}</span>`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // Repo Code Modal Logic
+        const repoFiles = {
+            html: `<!-- index.html - PixiDrive Repository -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PixiDrive - Drive-Powered Photography Galleries</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>PixiDrive Platform</h1>
+    <script src="script.js"></script>
+</body>
+</html>`,
+            css: `/* styles.css */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #0a100f;
+    color: #fff;
+}`,
+            js: `// script.js
+console.log("PixiDrive Core Ready.");`
+        };
+
+        let activeCodeTab = 'html';
+
+        function openRepoModal() {
+            document.getElementById('repo-modal').classList.remove('hidden');
+            switchCodeTab('html');
+        }
+
+        function closeRepoModal() {
+            document.getElementById('repo-modal').classList.add('hidden');
+        }
+
+        function switchCodeTab(tab) {
+            activeCodeTab = tab;
+            document.querySelectorAll('.tab-code-btn').forEach(btn => {
+                btn.classList.remove('text-emerald-400', 'border-b-2', 'border-emerald-500');
+                btn.classList.add('text-zinc-400');
+            });
+            const btn = document.getElementById(`tab-btn-${tab}`);
+            btn.classList.add('text-emerald-400', 'border-b-2', 'border-emerald-500');
+            btn.classList.remove('text-zinc-400');
+
+            document.getElementById('code-content-display').textContent = repoFiles[tab];
+        }
+
+        function copyCurrentCodeTab() {
+            const text = repoFiles[activeCodeTab];
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            const label = document.getElementById('copy-btn-text');
+            label.innerText = '¡Copiado!';
+            setTimeout(() => label.innerText = 'Copiar Código', 2000);
+        }
+
+        // Initial Render
+        renderShowcase();
+    </script>
+</body>
+</html>
